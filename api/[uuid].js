@@ -2,7 +2,11 @@ const fetch = require('node-fetch')
 
 module.exports = async function (req, res) {
   const uuid = req.query.uuid
-  const remoteUrl = `https://stats.craft.moe/data/${uuid}/stats.json`
+  const remote = req.query.s
+  const remoteUrl = {
+    kedama: `https://stats.craft.moe/data/${uuid}/stats.json`,
+    nyaa: `https://i.nyaa.cat/data/${uuid}/stats.json`,
+  }[remote]
 
   try {
     const data = await fetch(remoteUrl).then(res => res.json())

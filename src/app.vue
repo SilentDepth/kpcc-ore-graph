@@ -1,6 +1,10 @@
 <template>
   <div id="app" class="h-screen p-5 flex flex-col items-center">
     <form class="mb-5 flex" @submit.prevent="generate">
+      <select v-model="source" class="flex-0 px-2 py-1 bg-gray-300 border-r border-r-gray-200 mr-px">
+        <option value="kedama">Kedama</option>
+        <option value="nyaa">Nyaa</option>
+      </select>
       <input v-model="input" class="flex-1 px-2 py-1 text-sm font-mono bg-gray-300 rounded-tl rounded-bl">
       <button class="flex-0 px-2 py-1 bg-blue-500 text-white rounded-tr rounded-br">Generate</button>
     </form>
@@ -26,11 +30,13 @@
     },
 
     setup () {
+      const source = ref('kedama')
       const input = ref(null)
 
       const {player} = state
 
       return {
+        source,
         input,
         state,
         player,
@@ -43,7 +49,7 @@
             return
           }
 
-          const data = await fetch(`/api/${uuid}`).then(res => res.json())
+          const data = await fetch(`/api/${uuid}?s=${source.value}`).then(res => res.json())
           player.value = data
         },
       }
