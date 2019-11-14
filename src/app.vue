@@ -5,7 +5,7 @@
         <option value="kedama">Kedama</option>
         <option value="nyaa">Nyaa</option>
       </select>
-      <input v-model="input" class="flex-1 px-2 py-1 text-sm font-mono bg-gray-300 rounded-tl rounded-bl">
+      <input v-model="input" placeholder="UUID" class="flex-1 px-2 py-1 text-sm placeholder-gray-600 font-mono bg-gray-300 rounded-tl rounded-bl">
       <button :disabled="loading" class="flex-0 px-2 py-1 text-white rounded-tr rounded-br relative" :class="loading ? 'bg-gray-500 cursor-default' : 'bg-blue-500'">
         <span :class="{invisible: loading}">Generate</span>
         <i v-show="loading" class="bg-white absolute inset-0 m-auto shadow"></i>
