@@ -6,7 +6,10 @@
         <option value="nyaa">Nyaa</option>
       </select>
       <input v-model="input" class="flex-1 px-2 py-1 text-sm font-mono bg-gray-300 rounded-tl rounded-bl">
-      <button class="flex-0 px-2 py-1 bg-blue-500 text-white rounded-tr rounded-br">Generate</button>
+      <button :disabled="loading" class="flex-0 px-2 py-1 text-white rounded-tr rounded-br relative" :class="loading ? 'bg-gray-500 cursor-default' : 'bg-blue-500'">
+        <span :class="{invisible: loading}">Generate</span>
+        <i v-show="loading" class="bg-white absolute inset-0 m-auto shadow"></i>
+      </button>
     </form>
 
     <h1 v-if="player" class="text-2xl text-center font-bold mb-2">{{ player.data.playername }}</h1>
@@ -32,12 +35,14 @@
     setup () {
       const source = ref('kedama')
       const input = ref(null)
+      const loading = ref(false)
 
       const {player} = state
 
       return {
         source,
         input,
+        loading,
         state,
         player,
 
@@ -49,8 +54,14 @@
             return
           }
 
-          const data = await fetch(`/api/${uuid}?s=${source.value}`).then(res => res.json())
-          player.value = data
+          loading.value = true
+          try {
+            const data = await fetch(`/api/${uuid}?s=${source.value}`).then(res => res.json())
+            player.value = data
+          } catch (e) {
+            console.error(e)
+          }
+          loading.value = false
         },
       }
     },
@@ -64,6 +75,24 @@
   #app {
     form {
       width: 300px;
+
+      button {
+        i {
+          width: 10px;
+          height: 10px;
+          animation: 1s linear infinite spinning;
+
+          @keyframes spinning {
+            from {
+              transform: rotate(0);
+            }
+
+            to {
+              transform: rotate(360deg);
+            }
+          }
+        }
+      }
     }
   }
 </style>
