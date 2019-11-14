@@ -50,11 +50,11 @@
     }
 
     &[data-type=lapis] {
-      fill: #16448d;
+      fill: #315ec4;
     }
 
     &[data-type=gold] {
-      fill: #f8af2b;
+      fill: #fcee4b;
     }
 
     &[data-type=diamond] {
@@ -62,11 +62,11 @@
     }
 
     &[data-type=redstone] {
-      fill: #8f0303;
+      fill: #ab0600;
     }
 
     &[data-type=emerald] {
-      fill: #007b18;
+      fill: #00ab28;
     }
 
     &[data-type=quartz] {
