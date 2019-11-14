@@ -2,22 +2,7 @@ import {ref, computed, reactive, watch, set} from '@vue/composition-api'
 
 const STORAGE_KEY = 'last_server'
 
-const server = computed({
-  get () {
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) {
-      return stored
-    } else {
-      localStorage.setItem(STORAGE_KEY, 'kedama')
-      return 'kedama'
-    }
-  },
-
-  set (val) {
-    localStorage.setItem(STORAGE_KEY, val)
-  },
-})
-
+const server = ref('kedama')
 const players = reactive({})
 
 function searchPlayers (input) {
@@ -36,6 +21,8 @@ async function fetchPlayer (uuid) {
 
 const _playersRequests = {}
 watch(server, async s => {
+  localStorage.setItem(STORAGE_KEY, s)
+
   if (!players[s] && !_playersRequests[s]) {
     _playersRequests[s] = fetch(`/api/${s}/players`).then(res => res.json())
     set(players, s, await _playersRequests[s])
