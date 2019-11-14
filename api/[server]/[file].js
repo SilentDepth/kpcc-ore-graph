@@ -1,5 +1,8 @@
 const fetch = require('node-fetch')
 
+const processPlayers = require('./_process-players')
+const processPlayer = require('./_process-player')
+
 module.exports = async function ({query: {server, file}}, res) {
   let remoteUrl = {
     kedama: `https://stats.craft.moe/data/`,
@@ -13,9 +16,9 @@ module.exports = async function ({query: {server, file}}, res) {
     remoteUrl += `${uuid}/stats.json`
 
     try {
-      const data = await fetch(remoteUrl).then(res => res.json())
-      console.log(`[api] Requested ${remoteUrl} (${data.data.playername}).`)
-      res.json(data)
+      const player = await fetch(remoteUrl).then(res => res.json())
+      console.log(`[api] Requested ${remoteUrl} (${player.data.playername}).`)
+      res.json(processPlayer(player))
     } catch (e) {
       console.error(`[api] Requesting ${remoteUrl} failed.`)
       console.error(e)
@@ -33,9 +36,9 @@ module.exports = async function ({query: {server, file}}, res) {
     }
 
     try {
-      const data = await fetch(remoteUrl).then(res => res.json())
+      const players = await fetch(remoteUrl).then(res => res.json())
       console.log(`[api] Requested ${remoteUrl}.`)
-      res.json(data)
+      res.json(processPlayers(players))
     } catch (e) {
       console.error(`[api] Requesting ${remoteUrl} failed.`)
       console.error(e)
