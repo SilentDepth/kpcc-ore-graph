@@ -42,10 +42,10 @@
         player,
 
         generate: async () => {
-          const uuid = input.value.trim().toLowerCase()
+          const uuid = input.value.replace(/-|\s/g, '').toLowerCase()
 
           if (!/^[0-9a-f]{32}$/.test(uuid)) {
-            alert('Only short format of UUID is currently supported.')
+            alert('Currently only UUID is supported.')
             return
           }
 
