@@ -2,7 +2,7 @@ import {ref, computed, reactive, watch, set} from '@vue/composition-api'
 
 const STORAGE_KEY = 'last_server'
 
-const server = ref('kedama')
+const server = ref(localStorage.getItem(STORAGE_KEY) || 'kedama')
 const players = reactive({})
 
 function searchPlayers (input) {
