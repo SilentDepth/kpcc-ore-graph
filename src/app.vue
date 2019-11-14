@@ -63,7 +63,7 @@
       })
 
       watch(input, (val) => {
-        if (val !== (selectedPlayer.value && selectedPlayer.value.playername)) {
+        if (val !== (selectedPlayer?.value.playername)) {
           selectedPlayer.value = null
           isSearching.value = true
         }
