@@ -29,7 +29,7 @@
     </form>
 
     <h1 v-if="playername" class="text-2xl text-center font-bold mb-2">{{ playername }}</h1>
-    <TheGraph :data="graphData"/>
+    <TheGraph v-if="graphData" :data="graphData"/>
 
     <footer class="mt-auto text-center text-gray-500">Built with ❤︎ by KPCC</footer>
   </div>
@@ -108,10 +108,12 @@
   }
 </script>
 
-<style lang="scss">
+<style>
   @tailwind base;
   @tailwind utilities;
+</style>
 
+<style lang="scss" scoped>
   #app {
     form {
       width: 300px;

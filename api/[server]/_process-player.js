@@ -21,11 +21,27 @@ const KEYS_LEGACY = [
   'stat.mineBlock.minecraft.nether_quartz_ore',
 ]
 
+function countTotalMining (player, isLegacy) {
+  const prefix = isLegacy ? 'stat.mineBlock.' : 'minecraft:mined/'
+  return Object.entries(player.stats).reduce((total, [k, v]) => total + (k.startsWith(prefix) ? v : 0), 0)
+}
+
 module.exports = function processPlayer (player) {
   const isLegacy = Object.keys(player.stats)[0].startsWith('stat')
   const keys = isLegacy ? KEYS_LEGACY : KEYS_MODERN
+  const oreStats = fromEntries(TYPES.map((k, idx) => [k, player.stats[keys[idx]] || 0]))
+
+  const totalMining = countTotalMining(player, isLegacy)
+
   return {
     playername: player.data.playername,
-    stats: TYPES.map((k, idx) => [k, player.stats[keys[idx]] || 0]).reduce((obj, [k, v]) => ({...obj, [k]: v}), {}),
+    stats: {
+      ...oreStats,
+      total_mining: totalMining,
+    },
   }
+}
+
+function fromEntries (entries) {
+  return entries.reduce((obj, [k, v]) => ({...obj, [k]: v}), {})
 }

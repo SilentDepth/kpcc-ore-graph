@@ -1,7 +1,5 @@
-module.exports = {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
+const prodPlugins = process.env.NODE_ENV === 'production'
+  ? {
     '@fullhuman/postcss-purgecss': {
       content: [
         './src/**/*.vue',
@@ -12,5 +10,13 @@ module.exports = {
         'body',
       ],
     },
+  }
+  : {}
+
+module.exports = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+    ...prodPlugins,
   },
 }

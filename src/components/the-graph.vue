@@ -1,13 +1,23 @@
 <template>
-  <svg v-if="data" width="300" height="300">
-    <g v-for="r of 100" :key="r" :transform="`translate(0, ${(r - 1) * 3})`">
-      <rect v-for="c of 100" :key="c" width="3" height="3" :x="(c - 1) * 3" y="0" :data-type="blockType((r - 1) * 100 + c)"></rect>
-    </g>
-  </svg>
+  <div>
+    <div class="bg-gray-200">
+      <svg v-if="data" width="300" height="300" :style="svgStyle">
+        <g v-for="r of 100" :key="r" :transform="`translate(0, ${(r - 1) * 3})`">
+          <rect v-for="c of 100" :key="c" width="3" height="3" :x="(c - 1) * 3" y="0" :data-type="blockType((r - 1) * 100 + c)"></rect>
+        </g>
+      </svg>
+    </div>
+    <form class="mt-5 flex items-center justify-center">
+      <label class="flex items-center">
+        <input v-model="showTotalMining" type="checkbox">
+        <span class="ml-2">Show Total Mining</span>
+      </label>
+    </form>
+  </div>
 </template>
 
 <script>
-  import {computed} from '@vue/composition-api'
+  import {ref, computed} from '@vue/composition-api'
 
   import {TYPES} from '../../consts'
 
@@ -19,25 +29,47 @@
     },
 
     setup (props) {
+      const showTotalMining = ref(false)
+
+      const totalOre = computed(() => TYPES.reduce((total, type) => total + props.data[type], 0))
       const blockLevels = computed(() => {
         const data = props.data
         if (data) {
-          const total = Object.values(data).reduce((total, val) => total + val)
           const levels = TYPES.map(type => data[type] || 0).reduce((arr, val) => arr.concat(val + arr[arr.length - 1]), [0]).slice(1)
-          return levels.map(val => Math.ceil(val / total * 10000))
+          return levels.map(val => Math.ceil(val / totalOre.value * 10000))
         } else {
           return []
         }
       })
 
+      const total = computed(() => totalOre.value + props.data.total_mining)
+      const svgStyle = computed(() =>
+        showTotalMining.value
+          ? {
+            transform: `scale(${totalOre.value / total.value})`,
+            outline: `${total.value / totalOre.value}px solid rgba(255, 0, 255, .5)`,
+          }
+          : {
+            outline: '0 solid rgba(255, 0, 255, 0)',
+          }
+      )
+
       return {
+        showTotalMining,
+        svgStyle,
+
         blockType: blockNo => TYPES[blockLevels.value.findIndex(lvl => lvl >= blockNo)],
       }
     },
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  svg {
+    transform-origin: left top;
+    transition: all 500ms cubic-bezier(0.215, 0.61, 0.355, 1);
+  }
+
   rect {
     fill: #f0f;
 
