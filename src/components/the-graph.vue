@@ -42,12 +42,11 @@
         }
       })
 
-      const total = computed(() => totalOre.value + props.data.total_mining)
       const svgStyle = computed(() =>
         showTotalMining.value
           ? {
-            transform: `scale(${totalOre.value / total.value})`,
-            outline: `${total.value / totalOre.value}px solid rgba(255, 0, 255, .5)`,
+            transform: `scale(${totalOre.value / props.data.total_mining})`,
+            outline: `${props.data.total_mining / totalOre.value}px solid rgba(255, 0, 255, .5)`,
           }
           : {
             outline: '0 solid rgba(255, 0, 255, 0)',
