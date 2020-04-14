@@ -108,10 +108,7 @@
   }
 </script>
 
-<style>
-  @tailwind base;
-  @tailwind utilities;
-</style>
+<style lang="scss" src="./assets/css/base.scss"></style>
 
 <style lang="scss" scoped>
   #app {
