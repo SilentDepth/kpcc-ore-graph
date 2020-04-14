@@ -117,7 +117,15 @@
 <style lang="scss" src="./assets/css/base.scss"></style>
 
 <style lang="scss" scoped>
+  @import url('/font/inter.css');
+
   #app {
+    font-family: Inter, theme('fontFamily.sans');
+
+    @supports (font-variation-settings: normal) {
+      font-family: 'Inter var', theme('fontFamily.sans');
+    }
+
     form {
       button {
         i {
