@@ -9,7 +9,7 @@
     </div>
     <form class="mt-5 flex items-center justify-center">
       <label class="flex items-center">
-        <input v-model="showTotalMining" type="checkbox">
+        <input v-model="showTotalMining" type="checkbox" class="form-checkbox">
         <span class="ml-2">Show Total Mining</span>
       </label>
     </form>

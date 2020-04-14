@@ -1,35 +1,41 @@
 <template>
-  <div id="app" class="h-screen p-5 flex flex-col items-center">
-    <form class="mb-5 flex relative" @submit.prevent="generate">
-      <select v-model="server" class="flex-none px-2 py-1 bg-gray-300 mr-px">
-        <option value="kedama">Kedama</option>
-        <option value="nyaa">Nyaa</option>
-      </select>
-      <input
-          v-model="input"
-          :placeholder="players[server] ? 'UUID or Playername' : 'Loading...'"
-          class="flex-1 px-2 py-1 text-sm placeholder-gray-600 font-mono bg-gray-300 rounded-tl rounded-bl"
-      >
-      <button
-          :disabled="loading"
-          class="flex-none px-2 py-1 text-white rounded-tr rounded-br relative"
-          :class="loading ? 'bg-gray-500 cursor-default' : 'bg-blue-500'"
-      >
-        <span :class="{invisible: loading}">Generate</span>
-        <i v-show="loading" class="bg-white absolute inset-0 m-auto shadow"></i>
-      </button>
+  <div id="app" class="h-screen mx-auto p-5 flex flex-col" style="max-width: 640px;">
+    <form class="mb-5 flex flex-col sm:flex-row" @submit.prevent="generate">
+      <label>
+        <span class="block mb-2 text-sm tracking-wide text-gray-600 uppercase">Server</span>
+        <select v-model="server" class="block w-full form-select">
+          <option value="kedama">毛玉線圈物語</option>
+          <option value="nyaa">喵窝</option>
+        </select>
+      </label>
+      <label class="relative sm:flex-1 mt-4 sm:mt-0 sm:ml-4">
+        <span class="block mb-2 text-sm tracking-wide text-gray-600 uppercase">Player</span>
+        <span class="flex">
+          <input
+            v-model="input"
+            :placeholder="players[server] ? 'UUID or Playername' : 'Loading...'"
+            class="relative focus:z-10 flex-1 form-input border-r-0 rounded-r-none"
+          >
+          <button
+            :disabled="loading"
+            :class="['relative flex-none px-2 py-1 rounded-r text-white', loading ? 'bg-gray-500 cursor-default' : 'bg-blue-500']"
+          >
+            <span :class="{invisible: loading}">Generate</span>
+            <i v-show="loading" class="bg-white absolute inset-0 m-auto shadow"></i>
+          </button>
+        </span>
 
-      <player-list
+        <player-list
           v-show="isSearching"
           :players="filteredPlayerList"
-          class="absolute w-full mt-px"
-          style="top: 100%;"
+          class="absolute _top-full w-full mt-1"
           @click-player="selectPlayer"
-      />
+        />
+      </label>
     </form>
 
     <h1 v-if="playername" class="text-2xl text-center font-bold mb-2">{{ playername }}</h1>
-    <TheGraph v-if="graphData" :data="graphData"/>
+    <TheGraph v-if="graphData" :data="graphData" class="mx-auto" />
 
     <footer class="mt-auto text-center text-gray-500">Built with ❤︎ by KPCC</footer>
   </div>
@@ -113,8 +119,6 @@
 <style lang="scss" scoped>
   #app {
     form {
-      width: 300px;
-
       button {
         i {
           width: 10px;
@@ -133,5 +137,9 @@
         }
       }
     }
+  }
+
+  ._top-full {
+    top: 100%;
   }
 </style>
