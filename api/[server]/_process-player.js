@@ -1,4 +1,4 @@
-import {TYPES} from '../../consts'
+const {TYPES} = require('../../consts')
 
 const KEYS_MODERN = [
   'minecraft:mined/minecraft:coal_ore',
@@ -26,7 +26,7 @@ function countTotalMining (player, isLegacy) {
   return Object.entries(player.stats).reduce((total, [k, v]) => total + (k.startsWith(prefix) ? v : 0), 0)
 }
 
-export default function processPlayer (player) {
+module.exports = function processPlayer (player) {
   const isLegacy = Object.keys(player.stats)[0].startsWith('stat')
   const keys = isLegacy ? KEYS_LEGACY : KEYS_MODERN
   const oreStats = fromEntries(TYPES.map((k, idx) => [k, player.stats[keys[idx]] || 0]))
