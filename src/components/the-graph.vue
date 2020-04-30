@@ -1,13 +1,9 @@
 <template>
   <div>
     <div class="bg-gray-200">
-      <svg v-if="data" width="300" height="300" :style="svgStyle">
-        <g v-for="r of 100" :key="r" :transform="`translate(0, ${(r - 1) * 3})`">
-          <rect v-for="c of 100" :key="c" width="3" height="3" :x="(c - 1) * 3" y="0" :data-type="blockType((r - 1) * 100 + c)"></rect>
-        </g>
-      </svg>
+      <canvas ref="canvas" class="block mx-auto" style="width: 300px; height: 342px; image-rendering: crisp-edges;" />
     </div>
-    <form class="mt-5 flex items-center justify-center">
+    <form class="my-5 flex items-center justify-center">
       <label class="flex items-center">
         <input v-model="showTotalMining" type="checkbox" class="form-checkbox">
         <span class="ml-2">Show Total Mining</span>
@@ -17,9 +13,26 @@
 </template>
 
 <script>
-  import {ref, computed} from '@vue/composition-api'
+  import {computed, ref, watch, watchEffect} from '@vue/composition-api'
 
   import {TYPES} from '../../consts'
+
+  const BlockColor = {
+    coal: [52, 52, 52, 255],
+    iron: [175, 142, 119, 255],
+    lapis: [49, 94, 196, 255],
+    gold: [252, 238, 75, 255],
+    diamond: [61, 224, 229, 255],
+    redstone: [171, 6, 0, 255],
+    emerald: [0, 171, 40, 255],
+    quartz: [234, 229, 222, 255],
+  }
+
+  function writeValues (arr, start, ...values) {
+    values.forEach((val, idx) => {
+      arr[start + idx] = val
+    })
+  }
 
   export default {
     name: 'TheGraph',
@@ -29,6 +42,9 @@
     },
 
     setup (props) {
+      /** @type {{value: HTMLCanvasElement}} */
+      const canvas = ref(null)
+
       const showTotalMining = ref(false)
 
       const totalOre = computed(() => TYPES.reduce((total, type) => total + props.data[type], 0))
@@ -53,11 +69,41 @@
           }
       )
 
+      const blockType = blockNo => TYPES[blockLevels.value.findIndex(lvl => lvl >= blockNo)]
+
+      const draw = () => {
+        const width = 100
+        const height = 114
+        Object.assign(canvas.value, {width, height})
+
+        const imageData = new ImageData(width, height)
+        for (let i = 0, end = imageData.data.length; i < end; i += 4) {
+          const p = i / 4
+          const typeIdx = blockLevels.value.findIndex(lvl => lvl >= p)
+          if (typeIdx >= 0) {
+            writeValues(imageData.data, (p + typeIdx * width * 2) * 4, ...BlockColor[TYPES[typeIdx]])
+          }
+        }
+
+        const ctx = canvas.value.getContext('2d')
+        ctx.putImageData(imageData, 0, 0)
+      }
+
+      watchEffect(() => {
+        if (canvas.value && props.data) {
+          draw()
+        }
+      })
+
       return {
         showTotalMining,
         svgStyle,
 
-        blockType: blockNo => TYPES[blockLevels.value.findIndex(lvl => lvl >= blockNo)],
+        blockLevels,
+        blockType,
+        blockOffset: blockNo => blockLevels.value.findIndex(lvl => lvl >= blockNo),
+
+        canvas,
       }
     },
   }

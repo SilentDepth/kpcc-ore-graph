@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="h-screen mx-auto p-5 flex flex-col" style="max-width: 640px;">
+  <div id="app" class="h-screen mx-auto p-5 border-l border-r border-gray-300 bg-gray-100 flex flex-col" style="max-width: 640px;">
     <form class="mb-5 flex flex-col sm:flex-row" @submit.prevent="generate">
       <label>
         <span class="block mb-2 text-sm tracking-wide text-gray-600 uppercase">Server</span>
@@ -35,17 +35,20 @@
     </form>
 
     <h1 v-if="playername" class="text-2xl text-center font-bold mb-2">{{ playername }}</h1>
-    <TheGraph v-if="graphData" :data="graphData" class="mx-auto" />
+    <TheGraph :data="graphData" class="mx-auto" />
+
+    <BarGraph :data="graphData" class="my-10 mx-auto" />
 
     <footer class="mt-auto text-center text-gray-500">Built with ❤︎ by KPCC</footer>
   </div>
 </template>
 
 <script>
-  import {ref, reactive, computed, watch} from '@vue/composition-api'
+  import {computed, ref, watch} from '@vue/composition-api'
 
   import PlayerList from './components/player-list.vue'
   import TheGraph from './components/the-graph.vue'
+  import BarGraph from './components/bar-graph.vue'
   import useApi from './composables/api'
 
   export default {
@@ -54,12 +57,13 @@
     components: {
       PlayerList,
       TheGraph,
+      BarGraph,
     },
 
     setup () {
       const {server, players, searchPlayers, fetchPlayer} = useApi()
 
-      const input = ref(null)
+      const input = ref(process.env.NODE_ENV === 'development' ? '35b273b6cde14447b29b11377f6ab27d' : null)
       const selectedPlayer = ref(null)
       const loading = ref(false)
       const isSearching = ref(false)
@@ -70,7 +74,7 @@
       const filteredPlayerList = computed(() => searchPlayers(input.value))
 
       watch(input, (val) => {
-        if (val !== (selectedPlayer.value?.playername)) {
+        if (val !== selectedPlayer.value?.playername) {
           selectedPlayer.value = null
           isSearching.value = true
         }
@@ -96,7 +100,7 @@
         },
 
         generate: async () => {
-          const uuid = selectedPlayer.value.uuid || input.value.replace(/-|\s/g, '').toLowerCase()
+          const uuid = selectedPlayer.value?.uuid || input.value.replace(/-|\s/g, '').toLowerCase()
 
           isSearching.value = false
           loading.value = true
