@@ -16,3 +16,7 @@ html {
 @tailwind components;
 
 @tailwind utilities;
+
+.font-tnum {
+  font-feature-settings: 'tnum';
+}

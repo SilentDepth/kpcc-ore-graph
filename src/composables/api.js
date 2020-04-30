@@ -28,7 +28,7 @@ watch(server, async s => {
     players[s] = await _playersRequests[s]
     delete _playersRequests[s]
   }
-})
+}, {immediate: true})
 
 export default function useApi () {
   return {
