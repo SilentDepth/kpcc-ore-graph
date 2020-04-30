@@ -33,7 +33,7 @@
     </label>
   </form>
 
-  <div v-if="playername" :class="['mt-10', {'invisible': isSearching}]">
+  <div v-if="playername" :class="['my-10', {'invisible': isSearching}]">
     <h1 class="mb-2 text-2xl text-center font-black">{{ playername }}</h1>
     <BarGraph v-if="graphData" :data="graphData" class="mx-5" />
   </div>
