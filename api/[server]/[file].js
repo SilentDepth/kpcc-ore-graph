@@ -1,9 +1,9 @@
-const fetch = require('node-fetch')
+import fetch from 'node-fetch'
 
-const processPlayers = require('./_process-players')
-const processPlayer = require('./_process-player')
+import processPlayers from './_process-players'
+import processPlayer from './_process-player'
 
-module.exports = async function ({query: {server, file}}, res) {
+export default async function ({query: {server, file}}, res) {
   let remoteUrl = {
     kedama: `https://stats.craft.moe/data/`,
     nyaa: `https://i.nyaa.cat/data/`,

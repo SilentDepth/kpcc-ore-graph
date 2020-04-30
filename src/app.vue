@@ -1,16 +1,15 @@
 <template>
-  <div id="app" class="h-screen mx-auto p-5 border-l border-r border-gray-300 bg-gray-100 flex flex-col" style="max-width: 640px;">
-    <form class="mb-5 flex flex-col sm:flex-row" @submit.prevent="generate">
-      <label>
-        <span class="block mb-2 text-sm tracking-wide text-gray-600 uppercase">Server</span>
-        <select v-model="server" class="block w-full form-select">
-          <option value="kedama">毛玉線圈物語</option>
-          <option value="nyaa">喵窝</option>
-        </select>
-      </label>
-      <label class="relative sm:flex-1 mt-4 sm:mt-0 sm:ml-4">
-        <span class="block mb-2 text-sm tracking-wide text-gray-600 uppercase">Player</span>
-        <span class="flex">
+  <form class="p-5 flex flex-col" @submit.prevent="generate">
+    <label>
+      <span class="block mb-2 text-sm tracking-wide text-gray-600 uppercase">Server</span>
+      <select v-model="server" class="block w-full form-select">
+        <option value="kedama">毛玉線圈物語</option>
+        <option value="nyaa">喵窝</option>
+      </select>
+    </label>
+    <label class="relative sm:flex-1 mt-4 sm:mt-0 sm:ml-4">
+      <span class="block mb-2 text-sm tracking-wide text-gray-600 uppercase">Player</span>
+      <span class="flex">
           <input
             v-model="input"
             :placeholder="players[server] ? 'UUID or Playername' : 'Loading...'"
@@ -25,22 +24,19 @@
           </button>
         </span>
 
-        <player-list
-          v-show="isSearching"
-          :players="filteredPlayerList"
-          class="absolute _top-full w-full mt-1"
-          @click-player="selectPlayer"
-        />
-      </label>
-    </form>
+      <player-list
+        v-show="isSearching"
+        :players="filteredPlayerList"
+        class="absolute _top-full w-full mt-1"
+        @click-player="selectPlayer"
+      />
+    </label>
+  </form>
 
-    <h1 v-if="playername" class="text-2xl text-center font-bold mb-2">{{ playername }}</h1>
-    <TheGraph :data="graphData" class="mx-auto" />
+  <h1 v-if="playername" class="text-2xl text-center font-bold mb-2">{{ playername }}</h1>
+  <TheGraph :data="graphData" class="mx-auto" />
 
-    <BarGraph :data="graphData" class="my-10 mx-auto" />
-
-    <footer class="mt-auto text-center text-gray-500">Built with ❤︎ by KPCC</footer>
-  </div>
+  <footer class="mt-auto py-5 text-gray-500 text-center">Built with ❤︎ by KPCC</footer>
 </template>
 
 <script>
@@ -118,33 +114,23 @@
   }
 </script>
 
-<style lang="scss" src="./assets/css/base.scss"></style>
+<style src="./assets/css/base.scss" lang="scss"></style>
 
 <style lang="scss" scoped>
-  @import url('/font/inter.css');
+  form {
+    button {
+      i {
+        width: 10px;
+        height: 10px;
+        animation: 1s linear infinite spinning;
 
-  #app {
-    font-family: Inter, theme('fontFamily.sans');
+        @keyframes spinning {
+          from {
+            transform: rotate(0);
+          }
 
-    @supports (font-variation-settings: normal) {
-      font-family: 'Inter var', theme('fontFamily.sans');
-    }
-
-    form {
-      button {
-        i {
-          width: 10px;
-          height: 10px;
-          animation: 1s linear infinite spinning;
-
-          @keyframes spinning {
-            from {
-              transform: rotate(0);
-            }
-
-            to {
-              transform: rotate(360deg);
-            }
+          to {
+            transform: rotate(360deg);
           }
         }
       }

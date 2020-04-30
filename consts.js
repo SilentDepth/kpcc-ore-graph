@@ -1,1 +1,1 @@
-exports.TYPES = ['coal', 'iron', 'gold', 'emerald', 'lapis', 'redstone', 'diamond', 'quartz']
+export const TYPES = ['coal', 'iron', 'gold', 'emerald', 'lapis', 'redstone', 'diamond', 'quartz']
