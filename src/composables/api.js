@@ -1,4 +1,4 @@
-import {ref, computed, reactive, watch, set} from '@vue/composition-api'
+import {reactive, ref, watch} from 'vue'
 
 const STORAGE_KEY = 'last_server'
 
@@ -25,7 +25,7 @@ watch(server, async s => {
 
   if (!players[s] && !_playersRequests[s]) {
     _playersRequests[s] = fetch(`/api/${s}/players`).then(res => res.json())
-    set(players, s, await _playersRequests[s])
+    players[s] = await _playersRequests[s]
     delete _playersRequests[s]
   }
 })

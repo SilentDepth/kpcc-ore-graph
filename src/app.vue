@@ -44,7 +44,7 @@
 </template>
 
 <script>
-  import {computed, ref, watch} from '@vue/composition-api'
+  import {computed, ref, watch} from 'vue'
 
   import PlayerList from './components/player-list.vue'
   import TheGraph from './components/the-graph.vue'

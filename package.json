@@ -7,20 +7,19 @@
     "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@vue/composition-api": "^0.5.0",
     "core-js": "^3.6.5",
     "node-fetch": "^2.6.0",
-    "unfetch": "^4.1.0",
-    "vue": "^2.6.11"
+    "vue": "^3.0.0-beta.1"
   },
   "devDependencies": {
     "@tailwindcss/ui": "^0.2.2",
     "@vue/cli-plugin-babel": "^4.3.1",
     "@vue/cli-service": "^4.3.1",
+    "@vue/compiler-sfc": "^3.0.0-beta.1",
     "sass": "^1.26.5",
     "sass-loader": "^8.0.2",
     "tailwindcss": "^1.4.0",
     "typescript": "^3.8.3",
-    "vue-template-compiler": "^2.6.11"
+    "vue-cli-plugin-vue-next": "~0.1.2"
   }
 }

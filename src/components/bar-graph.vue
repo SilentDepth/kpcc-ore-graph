@@ -11,7 +11,7 @@
 </template>
 
 <script>
-  import {computed, ref, watchEffect} from '@vue/composition-api'
+  import {computed, ref, watchEffect} from 'vue'
 
   import {TYPES} from '../../consts'
 
