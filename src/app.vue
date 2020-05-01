@@ -45,7 +45,7 @@
 </template>
 
 <script>
-  import {computed, ref, watch, version} from 'vue'
+  import {computed, ref, watch, watchEffect, version} from 'vue'
 
   import PlayerList from './components/player-list.vue'
   import TheGraph from './components/the-graph.vue'
@@ -62,7 +62,7 @@
     },
 
     setup () {
-      const {server, players, searchPlayers, fetchPlayer} = useApi()
+      const {server, players, serverPlayers, searchPlayers, fetchPlayer} = useApi()
 
       const input = ref(process.env.NODE_ENV === 'development' ? '7ddb7f90d38447529cfb26d3e6ce4e15' : null)
       const selectedPlayer = ref(null)
@@ -73,6 +73,10 @@
       const graphData = ref()
 
       const filteredPlayerList = computed(() => searchPlayers(input.value))
+
+      function findUuidWithName (name) {
+        return serverPlayers.value.find(p => p.playername === name)?.uuid
+      }
 
       watch(input, (val) => {
         if (val !== selectedPlayer.value?.playername) {
@@ -101,7 +105,7 @@
         },
 
         generate: async () => {
-          const uuid = selectedPlayer.value?.uuid || input.value.replace(/-|\s/g, '').toLowerCase()
+          const uuid = selectedPlayer.value?.uuid ?? findUuidWithName(input.value) ?? input.value.replace(/-|\s/g, '').toLowerCase()
 
           isSearching.value = false
           loading.value = true

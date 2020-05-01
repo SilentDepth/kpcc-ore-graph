@@ -1,4 +1,4 @@
-import {reactive, ref, watch} from 'vue'
+import {computed, reactive, ref, watch} from 'vue'
 
 const STORAGE_KEY = 'last_server'
 
@@ -34,6 +34,7 @@ export default function useApi () {
   return {
     server,
     players,
+    serverPlayers: computed(() => players[server.value]),
 
     searchPlayers,
     fetchPlayer,
