@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white rounded-md overflow-hidden shadow-xs relative">
+  <div class="bg-white rounded-md overflow-hidden relative">
     <div class="absolute w-full space-y-px" style="height: 86px;">
       <div class="cursor-pointer" @click="onClickGroup('rocks')">
         <div :class="['flex transition-all duration-300 ease-in-out', activeGroup ? activeGroup === 'rocks' ? 'h-11' : 'h-5 opacity-50' : 'h-7']" :style="{width: totalRocks / maxTotal * 100 + '%'}">
@@ -29,20 +29,23 @@
       enter-active-class="overflow-hidden transition-all duration-300 ease-in-out"
       leave-active-class="overflow-hidden transition-all duration-300 ease-in-out"
       @before-enter="el => el.style.height = '0px'"
-      @enter="el => el.style.height = content.offsetHeight + 'px'"
+      @enter="el => el.style.height = el.children[0].offsetHeight + 'px'"
       @after-enter="el => el.style.height = null"
       @before-leave="el => el.style.height = el.offsetHeight + 'px'"
       @leave="el => el.style.height = '0px'"
     >
       <div v-if="activeDetail">
-        <div ref="content" class="pt-5">
-          <h3 class="mb-2 pl-3 text-gray-500">详细数据</h3>
-          <div class="space-y-px">
+        <div class="pt-5 border-t border-gray-300 bg-gray-50">
+          <h3 class="mb-2 px-3 text-gray-500 flex items-center">
+            <span>方块</span>
+            <span class="ml-auto">开采量</span>
+          </h3>
+          <div class="text-sm space-y-px">
             <div v-for="([type, count], idx) of activeDetail" :key="idx" class="relative">
-              <div :data-type="type" class="h-10 transition-all duration-300 ease-in-out" :style="{width: count / activeMax * 100 + '%'}" />
+              <div :data-type="type" class="h-8 transition-all duration-300 ease-in-out" :style="{width: count / activeMax * 100 + '%'}" />
               <div class="absolute inset-0 w-full h-full px-3 flex items-center">
-                <span class="p-1 bg-white bg-opacity-75 rounded">{{ type }}</span>
-                <span class="ml-auto p-1 bg-white bg-opacity-75 rounded font-tnum">{{ count }}</span>
+                <span class="px-1 py-0.5 bg-white bg-opacity-75 rounded">{{ TYPE_NAMES[type] }}</span>
+                <span class="ml-auto px-1 py-0.5 bg-white bg-opacity-75 rounded font-tnum">{{ count }}</span>
               </div>
             </div>
           </div>
@@ -53,9 +56,26 @@
 </template>
 
 <script>
-  import {computed, ref, watchEffect} from 'vue'
+  import {computed, ref} from 'vue'
 
   import {DIRTS, ORES, ROCKS} from '../../consts'
+
+  const TYPE_NAMES = {
+    coal: '煤矿石',
+    iron: '铁矿石',
+    lapis: '青金石矿石',
+    gold: '金矿石',
+    diamond: '钻石矿石',
+    redstone: '红石矿石',
+    emerald: '绿宝石矿石',
+    quartz: '下界石英矿石',
+    stone: '石头',
+    granite: '花岗岩',
+    diorite: '闪长岩',
+    andesite: '安山岩',
+    dirt: '泥土',
+    gravel: '沙砾',
+  }
 
   export default {
     name: 'BarGraph',
@@ -88,25 +108,6 @@
       })
       const activeMax = computed(() => ({ores: totalOres.value, rocks: totalRocks.value, dirts: totalDirts.value}[activeGroup.value]))
 
-      // const width = ref(300)
-      //
-      // const totalOre = computed(() => props.data ? [...Object.values(props.data)].reduce((sum, val) => sum + val) - props.data.total_mining : 0)
-      // const segments = computed(() => !props.data ? [] : TYPES.reduce((segments, type, idx) => {
-      //   const lastSegment = segments[idx - 1]
-      //   const offset = lastSegment ? lastSegment.offset + lastSegment.width : 0
-      //   segments.push({
-      //     type,
-      //     width: Math.max(idx === TYPES.length - 1 ? width.value - offset : Math.round(width.value * props.data[type] / totalOre.value), 1),
-      //     offset,
-      //   })
-      //   return segments
-      // }, []))
-      //
-      // const bigSize = ref(false)
-      // watchEffect(() => {
-      //   width.value = bigSize.value ? 500 : 300
-      // })
-
       return {
         ores,
         totalOres,
@@ -122,9 +123,7 @@
         onClickGroup (group) {
           activeGroup.value = activeGroup.value === group ? null : group
         },
-        content: ref(null),
-
-        log (value) {console.log(value); return value},
+        TYPE_NAMES,
       }
     },
   }
@@ -142,9 +141,9 @@
 
   [data-type=stone]    {background-color: #8f8f8f;}
   [data-type=granite]  {background-color: #a97764;}
-  [data-type=diorite]  {background-color: #e9e9e9;}
+  [data-type=diorite]  {background-color: #cececf;}
   [data-type=andesite] {background-color: #a8aa9a;}
 
   [data-type=dirt]     {background-color: #79553a;}
-  [data-type=gravel]   {background-color: #89817e;}
+  [data-type=gravel]   {background-color: #7c7b7b;}
 </style>

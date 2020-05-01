@@ -35,17 +35,17 @@
 
   <div v-if="playername" :class="['my-10', {'invisible': isSearching}]">
     <h1 class="mb-2 text-2xl text-center font-black">{{ playername }}</h1>
-    <BarGraph v-if="graphData" :data="graphData" class="mx-5" />
+    <BarGraph v-if="graphData" :data="graphData" class="mx-5 shadow" />
   </div>
 
   <footer class="mt-auto py-5 text-gray-500 text-center">
     <p>Built with ❤︎ by KPCC</p>
-    <p class="mt-2 text-sm text-gray-400">Built at {{ builtAt }}</p>
+    <p class="mt-2 text-sm text-gray-400">{{ builtAt }} &middot; <a href="https://github.com/vuejs/vue-next" style="color: #42b983;">Vue {{ version }}</a></p>
   </footer>
 </template>
 
 <script>
-  import {computed, ref, watch} from 'vue'
+  import {computed, ref, watch, version} from 'vue'
 
   import PlayerList from './components/player-list.vue'
   import TheGraph from './components/the-graph.vue'
@@ -115,6 +115,7 @@
           loading.value = false
         },
 
+        version,
         builtAt: new Date(+process.env.VUE_APP_BUILT_AT).toLocaleString(),
       }
     },
