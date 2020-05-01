@@ -38,7 +38,10 @@
     <BarGraph v-if="graphData" :data="graphData" class="mx-5" />
   </div>
 
-  <footer class="mt-auto py-5 text-gray-500 text-center">Built with ❤︎ by KPCC</footer>
+  <footer class="mt-auto py-5 text-gray-500 text-center">
+    <p>Built with ❤︎ by KPCC</p>
+    <p class="mt-2 text-sm text-gray-400">Built at {{ builtAt }}</p>
+  </footer>
 </template>
 
 <script>
@@ -111,6 +114,8 @@
           }
           loading.value = false
         },
+
+        builtAt: new Date(+process.env.VUE_APP_BUILT_AT).toLocaleString(),
       }
     },
   }

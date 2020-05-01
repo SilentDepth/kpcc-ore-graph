@@ -2,6 +2,8 @@ const {resolve} = require('path')
 
 const api = require('./api/[server]/[file]')
 
+process.env.VUE_APP_BUILT_AT = String(Date.now())
+
 module.exports = {
   devServer: {
     before (app) {
