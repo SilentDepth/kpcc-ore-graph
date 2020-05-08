@@ -1,19 +1,20 @@
 <template>
   <form class="p-5 flex flex-col space-y-4" @submit.prevent="generate">
-    <label>
+    <div>
       <span class="block mb-2 text-sm tracking-wide text-gray-600 uppercase">Server</span>
       <select v-model="server" class="block w-full form-select">
         <option value="kedama">毛玉線圈物語</option>
         <option value="nyaa">喵窝</option>
       </select>
-    </label>
-    <label class="relative">
+    </div>
+    <div class="relative z-10">
       <span class="block mb-2 text-sm tracking-wide text-gray-600 uppercase">Player</span>
       <span class="flex">
         <input
           v-model="input"
           :placeholder="players[server] ? 'UUID or Playername' : 'Loading...'"
-          class="relative focus:z-10 flex-1 form-input border-r-0 rounded-r-none"
+          class="relative focus:z-10 flex-1 form-input border-r-0 focus:border-r rounded-r-none"
+          @focus="$event.target.select()"
         >
         <button
           :disabled="loading"
@@ -28,12 +29,13 @@
         v-show="isSearching"
         :players="filteredPlayerList"
         class="absolute _top-full w-full mt-1"
+        style="max-height: 400px;"
         @click-player="selectPlayer"
       />
-    </label>
+    </div>
   </form>
 
-  <div v-if="playername" :class="['my-10', {'invisible': isSearching}]">
+  <div v-if="playername" class="my-10">
     <h1 class="mb-2 text-2xl text-center font-black">{{ playername }}</h1>
     <BarGraph v-if="graphData" :data="graphData" class="mx-5 shadow" />
   </div>
@@ -45,7 +47,7 @@
 </template>
 
 <script>
-  import {computed, ref, watch, watchEffect, version} from 'vue'
+  import {computed, ref, version, watch} from 'vue'
 
   import PlayerList from './components/player-list.vue'
   import TheGraph from './components/the-graph.vue'
@@ -125,8 +127,6 @@
     },
   }
 </script>
-
-<style src="./assets/css/base.scss" lang="scss"></style>
 
 <style lang="scss" scoped>
   form {
