@@ -35,10 +35,16 @@
     </div>
   </form>
 
-  <div v-if="playername" class="my-10">
+  <div ref="container" v-if="playername" class="my-5 py-5">
     <h1 class="mb-2 text-2xl text-center font-black">{{ playername }}</h1>
     <BarGraph v-if="graphData" :data="graphData" class="mx-5 shadow" />
   </div>
+  <button v-show="graphData" :disabled="copyState === CopyState.Busy" class="self-center text-blue-600 disabled:opacity-50 flex items-center" @click="capture">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 mr-1 fill-current">
+      <path d="M11.993 14.407l-1.552 1.552a4 4 0 1 1-1.418-1.41l1.555-1.556-4.185-4.185 1.415-1.415 4.185 4.185 4.189-4.189 1.414 1.414-4.19 4.19 1.562 1.56a4 4 0 1 1-1.414 1.414l-1.561-1.56zM7 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm10 0a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm2-7V5H5v8H3V4a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v9h-2z" />
+    </svg>
+    {{ copyStateLabel }}
+  </button>
 
   <footer class="mt-auto py-5 text-gray-500 text-center">
     <p>Built with ❤︎ by KPCC</p>
@@ -47,7 +53,8 @@
 </template>
 
 <script>
-  import {computed, ref, version, watch} from 'vue'
+  import {computed, nextTick, ref, version, watch} from 'vue'
+  import html2canvas from 'html2canvas'
 
   import PlayerList from './components/player-list.vue'
   import TheGraph from './components/the-graph.vue'
@@ -87,6 +94,31 @@
         }
       })
 
+      const CopyState = createEnum([
+        'Idle',
+        'Busy',
+        'Done',
+      ])
+      const CopyStateLabel = {
+        [CopyState.Idle]: '截图并复制到剪贴板',
+        [CopyState.Busy]: '截图中...',
+        [CopyState.Done]: '已复制到剪贴板！',
+      }
+      const container = ref()
+      const copyState = ref(CopyState.Idle)
+      const copyStateLabel = computed(() => CopyStateLabel[copyState.value])
+      const capture = async () => {
+        copyState.value = CopyState.Busy
+        await new Promise(resolve => setTimeout(resolve, 0))
+
+        const canvas = await html2canvas(container.value)
+        const blob = await new Promise(resolve => canvas.toBlob(resolve))
+        await navigator.clipboard.write([new ClipboardItem({[blob.type]: blob})])
+
+        copyState.value = CopyState.Done
+        setTimeout(() => copyState.value = CopyState.Idle, 3000)
+      }
+
       return {
         server,
         input,
@@ -121,10 +153,23 @@
           loading.value = false
         },
 
+        container,
+        CopyState,
+        copyState,
+        copyStateLabel,
+        capture,
+
         version,
         builtAt: new Date(+process.env.VUE_APP_BUILT_AT).toLocaleString(),
       }
     },
+  }
+
+  function createEnum (arr) {
+    return arr.reduce((enumObj, key, idx) => {
+      enumObj[key] = idx + 1
+      return enumObj
+    }, {})
   }
 </script>
 

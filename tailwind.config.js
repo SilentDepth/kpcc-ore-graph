@@ -8,6 +8,7 @@ module.exports = {
   },
   variants: {
     borderWidth: ['responsive', 'focus'],
+    opacity: ['responsive', 'hover', 'focus', 'disabled'],
   },
   plugins: [
     require('@tailwindcss/ui'),

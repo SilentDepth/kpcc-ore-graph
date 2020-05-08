@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-white rounded-md overflow-hidden relative">
-    <div class="absolute w-full space-y-px" style="height: 86px;">
+  <div class="border border-gray-300 bg-white rounded-md overflow-hidden relative">
+    <div class="absolute w-full space-y-px bg-white" style="height: 86px;">
       <div class="cursor-pointer" @click="onClickGroup('rocks')">
         <div :class="['flex transition-all duration-300 ease-in-out', activeGroup ? activeGroup === 'rocks' ? 'h-11' : 'h-5 opacity-50' : 'h-7']" :style="{width: totalRocks / maxTotal * 100 + '%'}">
           <template v-for="([rock, count]) of rocks">
