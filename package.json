@@ -10,7 +10,7 @@
     "core-js": "^3.6.5",
     "html2canvas": "^1.0.0-rc.5",
     "lodash-es": "^4.17.15",
-    "node-fetch": "^2.6.0",
+    "node-fetch": "^2.6.7",
     "vue": "3.0.0-beta.10"
   },
   "devDependencies": {
